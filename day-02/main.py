@@ -52,7 +52,7 @@ def game_possible(game, max_colours):
     return True
 
 
-def number_of_games_possible(file_path, max_colours):
+def id_sum_of_games_possible(file_path, max_colours):
     games = parse_input(file_path)
     possible_games = 0
     i = 0
@@ -63,8 +63,39 @@ def number_of_games_possible(file_path, max_colours):
             
     return possible_games
 
+def power(colours):
+    result = 1
+    for colour in colours:
+        result *= colours[colour]
+        
+    return result
+
+def minimum_required_for_game(game):
+    min_required = {
+        'red': 0,
+        'blue': 0,
+        'green': 0
+    }
+    
+    for reveal in game:
+        for colour in reveal:
+            if reveal[colour] > min_required[colour]:
+                min_required[colour] = reveal[colour]
+        
+    return min_required
+
+def sum_of_minimum_powers(file_path):
+    games = parse_input(file_path)
+    sum_of_powers = 0
+    
+    for game in games:
+        min_required = minimum_required_for_game(game)
+        sum_of_powers += power(min_required)
+        
+    return sum_of_powers
 
 if __name__ == "__main__":
     max_colours = {'red': 12, 'blue': 14, 'green': 13}
     file_path = 'input.txt'
-    print(number_of_games_possible(file_path, max_colours))
+    print(id_sum_of_games_possible(file_path, max_colours))
+    print(sum_of_minimum_powers(file_path))
